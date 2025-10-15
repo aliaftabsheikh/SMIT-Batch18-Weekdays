@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Class-13</title>
+</head>
+<body>
+<style>
+    body {
+        background: #000;
+        color: #fff;
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+    }
+    .form-container {
+        max-width: 400px;
+        margin: 40px auto;
+        background: #111;
+        padding: 30px 25px;
+        border-radius: 12px;
+        box-shadow: 0 0 20px 2px #222;
+        border: 2px solid;
+        border-image: linear-gradient(45deg, #ff0080, #7928ca, #00ffb4) 1;
+    }
+    .form-container h2 {
+        text-align: center;
+        margin-bottom: 25px;
+        letter-spacing: 2px;
+    }
+    label {
+        display: block;
+        margin-bottom: 7px;
+        font-weight: bold;
+        color: #fff;
+    }
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    input[type="file"] {
+        width: 100%;
+        padding: 5px;
+        margin-bottom: 18px;
+        border: 2px solid;
+        border-image: linear-gradient(90deg, #ff0080, #7928ca, #00ffb4) 1;
+        border-radius: 6px;
+        background: #222;
+        color: #fff;
+        transition: border-image 0.4s;
+        outline: none;
+    }
+    input[type="text"]:focus,
+    input[type="email"]:focus,
+    input[type="password"]:focus,
+    input[type="file"]:focus {
+        border-image: linear-gradient(90deg, #00ffb4, #ff0080, #7928ca) 1;
+    }
+    .gender-group {
+        margin-bottom: 18px;
+    }
+    .gender-group label {
+        display: inline-block;
+        margin-right: 15px;
+        font-weight: normal;
+    }
+    .submit-btn {
+        width: 100%;
+        padding: 12px;
+        background: linear-gradient(90deg, #ff0080, #7928ca, #00ffb4);
+        color: #fff;
+        border: none;
+        border-radius: 6px;
+        font-size: 1rem;
+        font-weight: bold;
+        cursor: pointer;
+        box-shadow: 0 2px 8px #222;
+        transition: transform 0.2s, box-shadow 0.2s;
+        letter-spacing: 1px;
+    }
+    .submit-btn:hover {
+        transform: scale(1.05);
+        box-shadow: 0 4px 16px #7928ca;
+        background: linear-gradient(270deg, #00ffb4, #ff0080, #7928ca);
+    }
+</style>
+<div class="form-container">
+    <h2>Registration Form</h2>
+    <form>
+        <label for="firstname">First Name</label>
+        <input type="text" id="firstname" name="firstname" required>
+
+        <label for="lastname">Last Name</label>
+        <input type="text" id="lastname" name="lastname" required>
+
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" required>
+
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" required>
+
+        <label for="file">Upload File</label>
+        <input type="file" id="file" name="file">
+
+        <div class="gender-group">
+            <label>Gender:</label>
+            <label><input type="radio" name="gender" value="male" required> Male</label>
+            <label><input type="radio" name="gender" value="female"> Female</label>
+            <label><input type="radio" name="gender" value="other"> Other</label>
+        </div>
+
+        <button type="submit" class="submit-btn">Submit</button>
+    </form>
+</div>
+
+</body>
+</html>
