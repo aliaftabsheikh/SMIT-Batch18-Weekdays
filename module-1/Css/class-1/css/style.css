@@ -1,0 +1,14 @@
+body{
+  background-color: black;
+}
+.para-1 {
+  background-color: purple !important; 
+  color: white;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.para-2 {
+  background-color: yellow !important;
+  color: black;
+}
+
