@@ -1,0 +1,85 @@
+*{
+    margin: 0;
+    padding: 0;
+    /* background-color: black; */
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 10px;
+}
+
+
+
+p{
+    background-color: rgb(191, 123, 255);
+    line-height: 30px;
+    letter-spacing: 4px;
+    word-spacing: 40px;
+    font-size: 25px;
+    color: white;
+    font-weight: bold;
+    text-transform: lowercase;
+}
+
+h1, h2, h3, h4,h5,h6{
+    background-color: yellow ;
+    margin-top: 10px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    padding-left: 60px;
+    font-size: 50px;
+    font-style: italic;
+    text-decoration: underline;
+}
+
+
+h2{
+    background-color: green;
+}
+
+h3{
+    background-color: cyan;
+    font-size: 5em;
+}
+
+h4{
+    background-color: pink;
+}
+
+h5{
+    background-color: bisque;
+}
+h6{
+    background-color: cadetblue;
+}
+
+
+li{
+    background-color: rgb(172, 172, 252);
+}
+
+a {
+    text-decoration: none;
+    font-size: 10em;
+
+}
+
+/* h4{
+    background-color: cyan;
+     margin-top: 10px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    padding-left: 60px;
+}
+h5{
+    background-color: rgb(44, 99, 249);
+     margin-top: 10px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    padding-left: 60px;
+}
+h6{
+    background-color: rgb(22, 240, 196);
+     margin-top: 10px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    padding-left: 60px;
+} */
