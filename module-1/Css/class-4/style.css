@@ -1,0 +1,122 @@
+*{
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+}
+.base{
+    text-shadow: 0px 1px 10px red ;
+    font-size: large;
+    transition: all 0.3s ease-in-out;
+
+}
+
+.base:hover{
+    font-size: xx-large;
+    text-shadow: 0px 1px 10px blue ;
+
+}
+
+
+
+
+.base::first-line{
+    background-color: yellow;
+    color: purple;
+    font-size: x-large;
+}
+
+.base::first-letter{
+    font-size: 80px;
+    color: rgb(65, 44, 5);
+    font-weight: bold;
+    background-color: lightgray;
+}
+
+
+a:link{
+    color: green;
+    text-decoration: none;
+    font-size: large;
+    
+}
+
+a:visited{
+    color: yellow;
+    text-decoration: none;    
+}
+
+.container{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 100vh;
+    flex-wrap: wrap ;
+    max-width: 1500px;
+    background-color: black;
+    margin: auto;
+} 
+.box{
+    /* width: 200px; */
+    min-width: 200px;
+    height: 200px;
+    background-color: lightblue;
+    border: 2px solid white ;
+    margin: 20px;
+    padding: 10px;
+    text-align: center;
+    transition: all 0.3s ease-in-out;
+    margin: 20px 10px; 
+    
+}
+
+
+.box:hover{
+    cursor: pointer;
+    width: 240px;
+    height: 240px;
+    /* font-size: 40px; */
+    background-color: blue;
+    color: white;
+}
+
+
+button{
+    padding: 10px 20px;
+    font-size: large;
+    background-color: green;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 10px;
+    transition: all 0.3s ease-in-out;
+}
+
+button:hover{
+    background-color: blue;
+    padding: 15px 30px;
+}
+
+button:active{
+background-color: red;
+margin-left: 4px;
+
+}
+
+
+input{
+    padding: 10px;
+    font-size: large;
+    border: 2px solid gray;
+    border-radius: 5px;
+    transition: all 0.3s ease-in-out;
+    margin-left: 10px;
+}
+
+
+input:focus{
+    border-color: blue;
+    outline: none;
+    background-color: rgb(157, 218, 243);
+    scale: 1.1;
+}
