@@ -1,0 +1,107 @@
+*{
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    margin: 0;
+    padding:0;
+}
+
+h1{
+    background-color: red;
+}
+
+.hero-section{
+    height: 200px;
+    background-image: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aGVyb3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60');
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+}
+
+.container{
+   background-color: rgb(182, 247, 17);
+   width: 100%;
+   /* height: 100vh; */
+   display: flex;
+   overflow-x: scroll;
+}
+
+.product-card{
+    width: 300px;
+    padding: 20px;
+    /* border: 1px solid #ccc; */
+    /* border-radius: 10px; */
+    background-color: #f9f9f9;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    margin: 30px;
+
+    /* border-width: thick; */
+    border-style: solid;
+    /* border-color: yellow; */
+
+    /* border-top-color: red;
+    border-right-color: blue;
+    border-bottom-color: green;
+    border-left-color: yellow; */
+
+    /* border-top-style: dashed;
+    border-right-style: dotted;
+    border-bottom-style: solid;
+    border-left-style: double; */
+
+    /* border-top-width: 20px;
+    border-right-width: 10px;
+    border-bottom-width: 20px;
+    border-left-width: 10px; */
+
+    /* border-color: red blue green yellow;
+    border-style: dashed dotted solid double;
+    border-width: 20px 10px 20px 10px; */
+
+    border: 4px solid red;
+    /* border-radius: 100%; */
+
+  transition: 0.3s all ease;
+ border-radius: 20px;
+
+ border-radius: 50%;
+
+}
+
+.product-card:hover{
+    border-radius: 0px;
+    transform: scale(1.2);
+}
+
+span{
+    background-color: red;
+    /* display: block; */
+    width: 200px;
+    height: 200px;
+    margin: 20px;
+}
+
+
+.one{
+    background-color: lightblue;
+    /* display: none;  */
+    /* width: 120px;
+    height: 200px; */
+    /* width: 100px;
+    height: 100px; */
+    /* margin: 20px; */
+}
+.three{
+    background-color: red;
+}
+
+.two{
+    background-color: red;
+    visibility: hidden;
+}
+
+/* .two{
+    visibility: visible;
+} */
+
+
+
