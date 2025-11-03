@@ -1,3 +1,9 @@
+*{
+    margin: 0;
+    padding: 0;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
 /* body {
 font-family: Arial, Verdana, sans-serif;
 color: #111111;
@@ -31,12 +37,120 @@ background-color: #c3e6e5;}
 .money {
 text-align: right;} */
 
-
-.count{
+/* .count{
     empty-cells: hide;
     transition: 0.3s ease all;
+    border-spacing: 20px 10px;
+    border-collapse: collapse;
+    empty-cells: hide;
+} */
+
+
+/* .count:hover{
+    background-color: #c3e6e5;
+    transform: scale(1.02);
+    border-collapse: separate;
+
 }
 
-.count:hover{
-    empty-cells: show;
+/* 
+input {
+font-size: 120%;
+color: #5a5854;
+background-color: #f2f2f2;
+border: 1px solid #bdbdbd;
+border-radius: 5px;
+padding: 5px 5px 5px 30px;
+display: block;
+margin-bottom: 10px;}
+
+input:focus {
+background-color: #da1313;
+border: 1px solid #b1e1e4;
+outline: none;
+}   */ 
+/* 
+input {
+font-size: 120%;
+color: #5a5854;
+background-color: #f2f2f2;
+border: 1px solid #bdbdbd;
+border-radius: 5px;
+padding: 5px 5px 5px 30px;
+display: block;
+margin-bottom: 10px;}
+
+input:focus {
+background-color: #FFF;
+border: 1px solid #b1e1e4;
+outline: none;
+} 
+
+fieldset {
+width: 350px;
+border: 1px solid #dcdcdc;
+border-radius: 10px;
+padding: 20px;
+text-align: right;}
+
+legend {
+background-color: #efefef;
+border: 1px solid #dcdcdc;
+border-radius: 10px;
+padding: 10px 20px;
+text-align: left;
+text-transform: uppercase;
+cursor: help;
+} */
+
+.box-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.box{
+    width: 200px;
+    height: 200px;
+    border: 2px solid #000;
+    padding: 20px;
+    margin: 20px;
+    background-color: gray;
+    font-size: 50px;
+    text-align: center;
+    align-content: center; 
+    font-weight: bold;
+}
+
+.parent_div{
+    background-color: gray;
+    width: 400px;
+    height: 400px;
+    position: relative;
+}
+
+.box1{
+    background-color: lightblue;
+}
+
+.box2{
+    background-color: lightgreen;
+    /* position: relative;
+    left: 170px;
+    top: 130px; */
+/* 
+    margin-top: 30px;
+    margin-left: 70px; */
+}
+
+.box3{
+       background-color: lightcoral;
+       position: absolute;
+      top: 70px;
+      left: 200px;
+}
+
+.box4{
+    background-color: lightgoldenrodyellow;
 }
