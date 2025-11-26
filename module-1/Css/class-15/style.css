@@ -1,0 +1,63 @@
+/* Mobile First Approach */
+
+
+h1 {
+    color: blue;
+}
+
+
+/* Large mobile devices  */
+
+@media (min-width: 600px) {
+    h1{
+        color: red;
+    }
+
+
+
+}
+
+/* tablets */
+
+@media (min-width: 768px) {
+    h1{
+        color: green;
+    }
+}
+
+/* Desktops */
+
+@media (min-width: 992px) {
+    h1{
+        color: purple;
+    }
+}
+
+/* Large Desktops */
+
+@media (min-width: 1200px) {
+    h1{
+        color: orange;
+    }
+}
+
+/* Extra Large Desktops */
+
+@media (min-width: 1400px) {
+    h1{
+        color: chocolate;
+    }
+}
+
+
+
+
+
+/* TRANSITION / ANIMATIONS  */
+/* CSS VARIABLES  */
+
+/* BOOTSTRAP 5 */
+/* NETLIFY */
+/*GITHUB DESKTOP   */
+
+ 

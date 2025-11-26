@@ -1,0 +1,76 @@
+*{
+    margin: 0;
+    padding: 0;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+body{
+    height: 100vh;
+    overflow: hidden;
+    position: relative;
+}
+
+.box{
+    width: 200px;
+    height: 200px;
+    background-color: teal;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    font-size: 40px;
+    position: absolute;
+    /* animation-name: boxMove;
+    animation-duration: 1s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+    animation-delay: 1s;
+    animation-fill-mode: forwards ; */
+
+    /* animation: boxMove 3s linear 0s infinite  forwards; */
+
+    /* transition-property: all;
+    transition-duration: 1s;
+    transition-timing-function: ease-in-out;
+    transition-delay: 2s; */
+
+    transition: all 1s ease-in-out 0s;
+
+}
+
+.box:hover{
+    width: 400px;
+    height: 400px;
+    background-color: purple;
+    font-size: 60px;
+}
+
+/* @keyframes boxMove {
+    0%{
+        top: 0;
+        left: 0;
+        background-color: teal;
+    }
+    25%{
+        top: 0;
+        left: calc(100% - 200px);
+        background-color: orange;
+    }
+    50%{
+        top: calc(100% - 200px);
+        left: calc(100% - 200px);
+        background-color: purple;
+    }
+    75%{
+        top: calc(100% - 200px);
+        left: 0;
+        background-color: brown;
+    }
+    100%{
+        top: 0;
+        left: 0;
+        background-color: teal;
+    }
+} */
