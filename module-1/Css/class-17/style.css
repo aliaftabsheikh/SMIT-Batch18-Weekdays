@@ -1,0 +1,182 @@
+*{
+    margin: 0px;
+    padding: 0;
+}
+
+body{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+:root{
+    --primaray-color: red;
+    --secondary-color: orange;
+
+    --m1 : 10px;
+    --m2: 20px;
+
+    --p1: 10px;
+    --p2: 20px;
+}
+
+.box{
+    width: 200px;
+    height: 200px;
+    background-color: black;
+    margin: 50px auto;
+    border-radius: 20px;
+    box-shadow: 10px 10px 15px grey;
+
+    transition-property: all;
+    transition-duration: 0.5s;
+    transition-timing-function: linear;
+    transition-delay: 2s;
+
+
+
+    /* animation-name: boxMove;
+    animation-duration: 1s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+    animation-fill-mode: forwards; */
+}
+
+.box:hover{
+   width: 250px;
+    height: 250px;
+    background-color: white;
+    border-radius: 50%;
+    box-shadow: 10px 10px 55px grey;
+}
+
+
+.box-1{
+
+    --primaray-color: yellow;
+    
+    width: 200px;
+    height: 200px;
+    background-color: var(--primaray-color);
+    margin: var(--m1) auto;
+    border-radius: 20px;
+    box-shadow: 10px 10px 15px grey;
+
+        transition-property: all;
+    transition-duration: 0.5s;
+    transition-timing-function: linear;
+
+}
+
+.box-1:hover{
+   width: 250px;
+    height: 250px;
+    background-color: var(--secondary-color);
+    border-radius: 50%;
+    box-shadow: 10px 10px 55px grey;
+}
+
+
+.box-2{
+    
+    width: 200px;
+    height: 200px;
+    background-color: var(--primaray-color);
+    margin: 50px auto;
+    border-radius: 20px;
+    box-shadow: 10px 10px 15px grey;
+
+        transition-property: all;
+    transition-duration: 0.5s;
+    transition-timing-function: linear;
+
+}
+
+.box-2:hover{
+   width: 250px;
+    height: 250px;
+    background-color: var(--secondary-color);
+    border-radius: 50%;
+    box-shadow: 10px 10px 55px grey;
+}
+
+
+.box-3{
+
+    
+    width: 200px;
+    height: 200px;
+    background-color: var(--primaray-color, gray);
+    margin: 50px auto;
+    border-radius: 20px;
+    box-shadow: 10px 10px 15px grey;
+    
+        transition-property: all;
+    transition-duration: 0.5s;
+    transition-timing-function: linear;
+
+}
+
+.box-3:hover{
+   width: 250px;
+    height: 250px;
+    background-color: var(--secondary-color);
+    border-radius: 50%;
+    box-shadow: 10px 10px 55px grey;
+}
+
+
+.box-4{
+    
+    width: 200px;
+    height: 200px;
+    background-color: var(--primaray-color);
+    margin: 50px auto;
+    border-radius: 20px;
+    box-shadow: 10px 10px 15px grey;
+
+        transition-property: all;
+    transition-duration: 0.5s;
+    transition-timing-function: linear;
+
+}
+
+.box-4:hover{
+   width: 250px;
+    height: 250px;
+    background-color: var(--secondary-color);
+    border-radius: 50%;
+    box-shadow: 10px 10px 55px grey;
+}
+
+@keyframes boxMove {
+   0%{
+    margin-top: 20px;
+    background-color: rgb(32, 253, 84);
+   }
+
+   25%{
+     margin-top: 30px;
+     background-color: yellow;
+    }
+
+    50%{
+     margin-top: 40px;
+     background-color: orange;
+    }
+
+    75%{
+     margin-top: 50px;
+     background-color: rgb(223, 11, 32);
+
+    }
+    
+    100%{
+     margin-top: 60px;
+     background-color: rgb(32, 11, 223);
+
+    }
+}
+
