@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <!-- NAVBAR  -->
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container">
+        <a class="navbar-brand" href="#">Nexus</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="#">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="#">About</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="#"
+                >Services</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="#"
+                >Contact us</a
+              >
+            </li>
+          </ul>
+          <form class="d-flex">
+            <input
+              class="form-control me-2"
+              type="search"
+              placeholder="Search"
+              aria-label="Search"
+            />
+            <button class="btn btn-outline-success" type="submit">
+              Search
+            </button>
+          </form>
+        </div>
+      </div>
+    </nav>
+
+    <!-- ================ Carousel ================== -->
+
+    <div
+      id="carouselExampleControls"
+      class="carousel slide"
+      data-bs-ride="carousel"
+    >
+      <div class="carousel-inner">
+        <div class="carousel-item active">
+          <img
+            src="https://upload.wikimedia.org/wikipedia/commons/a/ac/Charade.jpg"
+            class="d-block w-100"
+            alt="Mehran"
+          />
+        </div>
+        <div class="carousel-item">
+          <img
+            src="https://static.pakwheels.com/2020/07/fx9.jpg"
+            class="d-block w-100 object-fit"
+            alt="Fx"
+          />
+        </div>
+        <div class="carousel-item">
+          <img
+            src="https://upload.wikimedia.org/wikipedia/commons/b/b1/1982_Daihatsu_Charade_G20_850.jpg"
+            class="d-block w-100"
+            alt="Charade"
+          />
+        </div>
+      </div>
+      <button
+        class="carousel-control-prev"
+        type="button"
+        data-bs-target="#carouselExampleControls"
+        data-bs-slide="prev"
+      >
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button
+        class="carousel-control-next"
+        type="button"
+        data-bs-target="#carouselExampleControls"
+        data-bs-slide="next"
+      >
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
+    </div>
+
+    <!-- ===================== CARDS ================== -->
+
+    <div class="container">
+      <div class="row my-4 justify-content-around gap-3">
+
+        <!-- Card 1  -->
+
+        <div class="card col" style="width: 18rem;">
+  <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQgNnb5hmALDnYxGPfxYYkbVo-jWfe7ozJ2Rg&s" class="card-img-top" alt="...">
+  <div class="card-body">
+    <h5 class="card-title">Charade</h5>
+    <p class="card-text">Charade is a compact car known for its reliability and fuel efficiency.</p>
+     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+  Buy it now !
+</button>
+  </div>
+</div>
+
+        <!-- Card 2  -->
+
+        <div class="card col" style="width: 18rem;">
+  <img src="https://i.ytimg.com/vi/7OQFKx3j5_k/sddefault.jpg" class="card-img-top" alt="...">
+  <div class="card-body">
+    <h5 class="card-title">Mehran</h5>
+    <p class="card-text">Mehran car is a popular compact car known for its affordability and fuel efficiency.</p>
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+  Buy it now !
+</button>
+
+  </div>
+</div>
+
+        <!-- Card 3  -->
+
+      <div class="card col" style="width: 12rem;">
+  <img style="height: 300px; object-fit: cover;" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTk003Zk8WnYqPrJIxZanUnrNJGKpiov4e10Q&s" class="card-img-top" alt="...">
+  <div class="card-body">
+    <h5 class="card-title">Fx</h5>
+    <p class="card-text">Fx is a stylish and sporty car known for its performance and design.</p>
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+  Buy it now !
+</button>
+  </div>
+</div>
+       
+      </div>
+    </div>
+
+
+
+    <!-- ===== Modal === -->
+
+    
+     <!-- Button trigger modal -->
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Car configuration</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        All car configurations are coming soon!
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================ FOOTER ============ -->
+
+
+<footer class="bg-dark text-white pt-5 pb-4 mt-5">
+    <div class="container text-center text-md-start">
+      <div class="row text-center text-md-start">
+        <!-- Company Info -->
+        <div class="col-md-3 col-lg-3 col-xl-3 mx-auto mt-3">
+        <h5 class="text-uppercase mb-4 font-weight-bold text-warning">
+          Nexus
+        </h5>
+        <p>
+          Nexus is a leading provider of reliable compact cars. We are
+          dedicated to offering the best vehicles at affordable prices with
+          top-notch customer service.
+        </p>
+        </div>
+
+        <!-- Products -->
+        <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mt-3">
+        <h5 class="text-uppercase mb-4 font-weight-bold text-warning">
+          Products
+        </h5>
+        <p>
+          <a href="#" class="text-white text-decoration-none">Charade</a>
+        </p>
+        <p>
+          <a href="#" class="text-white text-decoration-none">Mehran</a>
+        </p>
+        <p>
+          <a href="#" class="text-white text-decoration-none">Fx</a>
+        </p>
+        <p>
+          <a href="#" class="text-white text-decoration-none"
+            >Accessories</a
+          >
+        </p>
+        </div>
+
+        <!-- Useful links -->
+        <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mt-3">
+        <h5 class="text-uppercase mb-4 font-weight-bold text-warning">
+          Useful links
+        </h5>
+        <p>
+          <a href="#" class="text-white text-decoration-none"
+            >Your Account</a
+          >
+        </p>
+        <p>
+          <a href="#" class="text-white text-decoration-none"
+            >Become an Affiliate</a
+          >
+        </p>
+        <p>
+          <a href="#" class="text-white text-decoration-none"
+            >Shipping Rates</a
+          >
+        </p>
+        <p>
+          <a href="#" class="text-white text-decoration-none">Help</a>
+        </p>
+        </div>
+
+        <!-- Contact -->
+        <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mt-3">
+        <h5 class="text-uppercase mb-4 font-weight-bold text-warning">
+          Contact
+        </h5>
+        <p>New York, NY 10012, US</p>
+        <p>info@nexus.com</p>
+        <p>+ 01 234 567 88</p>
+        <p>+ 01 234 567 89</p>
+        </div>
+      </div>
+
+      <hr class="mb-4" />
+
+      <div class="row align-items-center">
+        <div class="col-md-7 col-lg-8">
+        <p>
+          Copyright ©2024 All rights reserved by:
+          <a href="#" style="text-decoration: none">
+            <strong class="text-warning">Nexus</strong>
+          </a>
+        </p>
+        </div>
+        <div class="col-md-5 col-lg-4">
+        <div class="text-center text-md-end">
+          <ul class="list-unstyled list-inline">
+            <li class="list-inline-item">
+            <a
+              href="#"
+              class="btn-floating btn-sm text-white"
+              style="font-size: 1rem; text-decoration: none"
+              >Facebook</a
+            >
+            </li>
+            <li class="list-inline-item">
+            <a
+              href="#"
+              class="btn-floating btn-sm text-white"
+              style="font-size: 1rem; text-decoration: none"
+              >Twitter</a
+            >
+            </li>
+            <li class="list-inline-item">
+            <a
+              href="#"
+              class="btn-floating btn-sm text-white"
+              style="font-size: 1rem; text-decoration: none"
+              >Instagram</a
+            >
+            </li>
+          </ul>
+        </div>
+        </div>
+      </div>
+    </div>
+    </footer>
+
+  </body>
+</html>
