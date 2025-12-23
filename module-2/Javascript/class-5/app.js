@@ -22,7 +22,7 @@
 
 // alert("You are " + spec);
 
-// var numberOfCats = +prompt("How many cats?");
+                                                                                                            // var numberOfCats = prompt("How man+y cats?");
 
 // console.log(typeof(numberOfCats));
 
