@@ -5,13 +5,13 @@ var cities = ["Karachi", "Lahore", "Islamabad", "Quetta", "Peshawar", "Hyderabad
 // console.log("CitiesLength:", citiesLength);
 
 
-// console.log("City :", cities[citiesLength - 2]);
+// console.log("City :", cities[citiesLength - 1]);
 
 // for(var i = 0; i < cities.length; i++){
 //     console.log("City : ", cities[i]);
 // }
 
-// cities[6] = "Faisalabad";
+// cities[7] = "Faisalabad";
 
 // cities[1] = "Multan";
 
@@ -36,7 +36,7 @@ var cities = ["Karachi", "Lahore", "Islamabad", "Quetta", "Peshawar", "Hyderabad
 
 //! SPLICE
 
-cities.splice(2, 1, "Sargodha");
+cities.splice(2, 0, "Sargodha");
 cities.splice(0, 0, "Bahawalpur");
 
 console.log(cities);
