@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="app.js" defer></script>
+
+    <style>
+        body{
+            display: flex;
+            justify-content: center;
+                align-items: center;
+                height: 100vh;
+                font-family: Arial, Helvetica, sans-serif;
+        }
+        .box_container{
+            width: 400px;
+            height: 200px;
+            border: 1px solid black;
+            /* padding: 10px; */
+            background-color: rgb(5, 65, 65);
+            color: white;
+            border-radius: 10px;
+            font: bold;
+        }
+
+        .box_container img{
+            border-radius: 10px;
+        }
+        
+        .visible{
+            visibility: visible;
+        }
+        .hidden{
+            visibility: hidden;
+        }
+
+        /* .box_container_expanded{
+               width: 400px;
+            height: 300px;
+            border: 1px solid black;
+            padding: 10px;
+            background-color: rgb(70, 58, 150);
+            color: burlywood;
+            border-radius: 10px;
+            font: bold;
+        } */
+
+        button{
+            margin-top: 10px;
+            padding: 5px 10px;
+            border: none;
+            background-color: black;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .big{
+            width: 500px;
+            height: 300px;
+
+        }
+    </style>
+
+</head>
+
+
+<body>
+
+    <div id="box" class="box_container">
+
+        <!-- <p id="demiText">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur obcaecati
+            
+            
+        </p>
+         -->
+
+         <!-- <img 
+          onmouseover="swapPic()"
+           id="image" src="https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885_960_720.jpg" alt="Image" width="100%" height="100%" > -->
+         <img 
+           id="image" src="https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885_960_720.jpg" alt="Image" width="100%" height="100%" >
+
+
+         <button id="image-visibility-btn" onclick="toggleImage()">
+          Make Invisible
+         </button>
+
+        <!-- <button onClick="expandText();">Expand Text !</button> -->
+        <button onclick="makeBig()">
+            Make Big
+        </button>
+    </div>
+
+
+
+</body>
+</html>
