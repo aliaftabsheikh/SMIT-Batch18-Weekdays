@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Class-26</title>
+    <script src="app.js" defer></script>
+
+    <style>
+      
+        #todo-list {
+            padding: 10px;
+            display: flex;
+            justify-content: start;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .todo {
+            background-color: lightgray;
+            margin: 5px 0;
+            padding: 5px;
+        }
+
+
+
+    </style>
+  </head>
+  <body>
+    <!-- <h1>
+
+      <h2 class="text">
+       <span> Hello World 1</span>
+    </h2>
+
+      <p class="text">Hello World 2</p>
+
+    </h1> -->
+
+    <input type="text" id="input-field" placeholder="Type something..." />
+
+    <div id="todo-list">
+
+       
+       <!-- Todo items will be added here -->
+    </div>
+
+    <button onclick="addTodo()" id="add-todo-btn">Add Todo</button>
+  </body>
+</html>
