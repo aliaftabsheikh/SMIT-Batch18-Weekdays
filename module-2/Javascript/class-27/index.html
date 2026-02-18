@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="app.js" defer></script>
+
+    <style>
+        .heading {
+            color: black;
+            font-size: larger;
+            text-decoration: underline;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            text-shadow: 0px 0px 5px black;
+        }
+
+        #todo_container {
+            display: flex;
+            justify-content: start;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .todo-item {
+            text-align: center;
+            align-content: center;
+            width: 100px;
+            height: 100px;
+            background-color: rgb(5, 44, 57);
+            color: white;
+            /* padding: 10px; */
+            margin: 5px;
+            border-radius: 5px;
+            box-shadow: 0px 0px 5px gray;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+    </style>
+</head>
+<body>
+<!-- 
+    <div id="todo_container">
+        <p  id="p1" class="para-1">Hello World!</p>
+        <p  id="p2" class="para-2">Hello World!</p>
+        
+    </div> -->
+
+
+    <input type="text" id="todo_input" placeholder="Enter a new todo item...">
+
+    <button id="add_todo_button" onclick="addTodo()">Add Todo</button>
+
+    <div id="todo_container">
+      
+    </div>
+
+    
+</body>
+</html>

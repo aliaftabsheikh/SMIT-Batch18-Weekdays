@@ -9,6 +9,8 @@ function addTodo(){
         return;
     }
 
+    // var todoItem = document.createElement('div');
+
     var todo = `<div>
     <p class="todo" id="todo-${Date.now()}">
         ${todoText}
