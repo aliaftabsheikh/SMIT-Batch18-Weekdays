@@ -1,104 +1,88 @@
-// function greet(){
-//     console.log("Hi !!!")
-// }
+//! // Unstructured data 
 
+// var persons = ["Ali", "Ahmed"];
 
-// var btn = document.getElementById("btn");
+// console.log(persons[1]);
 
-// btn.addEventListener("click", greet)
-
-
-// var heading = document.querySelector("h1");
-
-
-
-// heading.addEventListener("mouseover", function (){
-//     heading.style.color = "white";
-//     heading.style.fontSize = "50px";
-//     heading.style.fontFamily = "cursive";
-//     heading.style.textShadow = "2px 2px 5px blue";
-//     heading.style.transition = "all 0.5s ease"; 
-//     heading.style.cursor = "pointer";
-//     heading.style.transform = "rotate(4deg)";
-//     heading.style.backgroundColor = "black";
-// } )
-
-// heading.addEventListener("mouseout", function(){
-//     heading.style.color = "black";
-//     heading.style.fontSize = "40px";
-//     heading.style.fontFamily = "Arial, sans-serif";
-//     heading.style.textShadow = "none";
-//     heading.style.transition = "all 0.5s ease";
-//     heading.style.transform = "rotate(0deg)";
-//     heading.style.backgroundColor = "transparent";
-// })
-
-
-
-//! Unstructured Data:
-
-// var person = ["Ali", 24, "Developer", "Pakistan", "Waqar", 23, "Designer", "India", "Sara", 22, "Manager", "USA"];
-
-// for(var i = 0; i < person.length; i++){
-//     console.log(`My name is ${person[i]} and my age is ${person[i]}`)
-// }
-
-//! Structured Data:
+//! // Structured data
 
 // var person = {
-//     name: "Ali",
-//     age : 24,
-//     role: "Developer",
-//     country: "Pakistan"
+//     name : "Ali"
 // }
 
-// console.log(person.role)
+// console.log(person.name)
+
+
+// var persons = [
+//     "Ali",
+//     24,
+//     "Developer",
+//     "Pakistan",
+
+//     "Ahmed",
+//     25,
+//     "Designer",
+//     "Afghnistan",
+
+//     "Waqar",
+//     27,
+//     "Tester",
+//     "India"
+// ]
+
+// for (var i = 0; i < persons.length; i++) {
+//     console.log(`My name is ${persons[i]} and I am ${persons[i]} years old. I am a ${persons[i]} and I belong to ${persons[i]}.`);
+// }
 
 
 
-var persons = [
-    {
-        name: "Ali",
-        age: 24,
-        role: "Developer",
-        country: "Pakistan",
-        isGraduated: true
-    },
 
-    {
-        name: "Waqar",
-        age: 23,
-        role: "Designer",
-        country: "India",
-        isGraduated: false
-    },
+// var persons = [
+//     {
+//         name : "Ali",
+//         age : 24,
+//         role : "Developer",
+//         country: "Pakistan",
+//     },
+//     {
+//         name : "Ahmed",
+//         age : 25,
+//         role : "Designer",
+//         country: "Afghanistan",
+//     },
+//     {
+//         name : "Waqar",
+//         age : 27,
+//         role : "Tester",
+//         country: "India",
+//     }
+// ]
 
-    {
-        name: "Sara",
-        age: 22,
-        role: "Manager",
-        country: "USA",
-        isGraduated: true
-    },
-    {
-        name: "John",
-        age: 25,
-        role: "Tester",
-        country: "UK",
-        isGraduated: false
-    },
-    {
-        name: "Emily",
-        age: 21,
-        role: "Analyst",
-        country: "Canada",
-        isGraduated: true
-    },
+// // console.log(persons[2].age);
 
-]
+// for (var i = 0; i < persons.length; i++) {
+//  console.log(`My name is ${persons[i].name} and I am ${persons[i].age} years old. I am a ${persons[i].role} and I belong to ${persons[i].country}.`);
+// }
 
-// console.log(persons[1].name)
 
-for(var i = 0; i < persons.length; i++){
-    console.log(`My name is ${persons[i].name} and my age is ${persons[i].age} and I am a ${persons[i].role} from ${persons[i].country}`)
-}
+
+
+var persons = {
+    name: "Ali",
+    age: 24,
+    role: "Developer",
+    country: "Pakistan",
+
+
+    greet: function(){
+      return 'Hello World !';
+    }
+}   
+
+
+
+// persons.country = "Turkey"
+// persons.cnic = "12345-1234567-1";
+
+console.log(persons.greet());
+
