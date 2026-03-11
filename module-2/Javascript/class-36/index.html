@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>11-03-2026</title>
+    <script src="app.js" defer></script>
+</head>
+<body>
+    <div id="container">
+
+    <input id="name" type="text" placeholder="Enter your name">
+    <input id="age" type="text" placeholder="Enter your age">
+    <input id="city" type="text" placeholder="Enter your city">
+
+
+    <button onclick="addUser()">Add User</button>
+
+        <div class="user-card">
+            <h3>Ali</h3>
+            <p>Age: 30</p>
+            <p>City: New York</p>
+        </div>
+       
+    </div>
+
+<style>
+    .inputs-wrapper {
+        grid-column: 1 / -1;
+        display: flex;
+        gap: 16px;
+        margin-bottom: 8px;
+        flex-wrap: wrap;
+    }
+
+    input[type="text"] {
+        flex: 1;
+        min-width: 200px;
+        padding: 14px 18px;
+        border: 2px solid #e2e8f0;
+        border-radius: 8px;
+        font-size: 14px;
+        font-family: inherit;
+        transition: all 0.3s ease;
+        background: white;
+        color: #2d3748;
+    }
+
+    input[type="text"]:focus {
+        outline: none;
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        transform: translateY(-2px);
+    }
+
+    input[type="text"]::placeholder {
+        color: #a0aec0;
+    }
+</style>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+    }
+
+    #container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 24px;
+        max-width: 1200px;
+        width: 100%;
+    }
+
+    .user-card {
+        background: white;
+        border-radius: 12px;
+        padding: 32px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+        overflow: hidden;
+        position: relative;
+    }
+
+    .user-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, #667eea, #764ba2);
+    }
+
+    .user-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+    }
+
+    .user-card h3 {
+        font-size: 24px;
+        color: #2d3748;
+        margin-bottom: 12px;
+        font-weight: 600;
+    }
+
+    .user-card p {
+        font-size: 14px;
+        color: #718096;
+        line-height: 1.6;
+    }
+</style>
+</body>
+</html>
