@@ -58,7 +58,11 @@ function displayPersons(){
     var container = document.getElementById("container");
 
 
+
+
+
     for (var i = 0; i < persons.length; i++) {
+        
         var personDiv = document.createElement("div");
         personDiv.setAttribute("class", "user-card");
 
