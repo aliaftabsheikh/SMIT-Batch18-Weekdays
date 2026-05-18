@@ -47,8 +47,8 @@ infiniteLoop();
 
 
 
-// Next class task 
-:
+// Next class task :
+
 // Higher Order functions 
     // Map
     // forEach
