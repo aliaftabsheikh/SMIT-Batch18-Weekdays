@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aurora — Tasks</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;450;500;600&family=JetBrains+Mono:wght@500;600&display=swap"
+        rel="stylesheet">
+    <script src="./crud.js" type="module" defer></script>
+    <style>
+        /* ===================== Aurora design tokens ===================== */
+        :root {
+            --bg: #070b16;
+            --bg-2: #0b1120;
+            --surface: rgba(255, 255, 255, 0.045);
+            --surface-strong: rgba(255, 255, 255, 0.07);
+            --border: rgba(255, 255, 255, 0.09);
+            --border-strong: rgba(255, 255, 255, 0.16);
+
+            --violet: #8b5cf6;
+            --indigo: #6366f1;
+            --cyan: #22d3ee;
+            --magenta: #ec4899;
+            --emerald: #34d399;
+
+            --grad-accent: linear-gradient(135deg, #8b5cf6 0%, #6366f1 45%, #22d3ee 100%);
+            --grad-text: linear-gradient(120deg, #c4b5fd 0%, #a5b4fc 40%, #67e8f9 100%);
+
+            --ink: #eef2ff;
+            --ink-soft: #b6c0da;
+            --ink-mute: #6b7690;
+
+            --radius: 18px;
+            --radius-sm: 12px;
+            --shadow-glow: 0 0 0 1px var(--border), 0 20px 50px -22px rgba(99, 102, 241, 0.55);
+            --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: 'Inter', system-ui, sans-serif;
+            color: var(--ink);
+            background: var(--bg);
+            position: relative;
+            overflow-x: hidden;
+            padding: clamp(1.25rem, 4vw, 3.5rem) 1.25rem 4rem;
+            display: flex;
+            justify-content: center;
+        }
+
+        /* Signature: drifting aurora light field behind everything */
+        body::before,
+        body::after {
+            content: "";
+            position: fixed;
+            inset: -30% -10% auto -10%;
+            height: 90vh;
+            z-index: -1;
+            filter: blur(70px);
+            opacity: 0.7;
+            pointer-events: none;
+        }
+
+        body::before {
+            background:
+                radial-gradient(45% 55% at 20% 25%, rgba(139, 92, 246, 0.55), transparent 70%),
+                radial-gradient(40% 50% at 78% 18%, rgba(34, 211, 238, 0.42), transparent 70%),
+                radial-gradient(45% 45% at 55% 40%, rgba(236, 72, 153, 0.32), transparent 70%);
+            animation: drift 22s var(--ease) infinite alternate;
+        }
+
+        body::after {
+            inset: auto -10% -40% -10%;
+            height: 70vh;
+            background:
+                radial-gradient(45% 60% at 70% 80%, rgba(99, 102, 241, 0.4), transparent 70%),
+                radial-gradient(40% 50% at 25% 90%, rgba(34, 211, 238, 0.28), transparent 70%);
+            animation: drift 28s var(--ease) infinite alternate-reverse;
+        }
+
+        @keyframes drift {
+            0% {
+                transform: translate3d(-4%, -2%, 0) scale(1);
+            }
+
+            100% {
+                transform: translate3d(5%, 3%, 0) scale(1.12);
+            }
+        }
+
+        .app {
+            width: 100%;
+            max-width: 620px;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            animation: rise 0.7s var(--ease) both;
+        }
+
+        /* ===================== Header ===================== */
+        .masthead {
+            display: flex;
+            flex-direction: column;
+            gap: 0.9rem;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 0.85rem;
+        }
+
+        .mark {
+            width: 46px;
+            height: 46px;
+            border-radius: 14px;
+            background: var(--grad-accent);
+            display: grid;
+            place-items: center;
+            box-shadow: 0 10px 30px -8px rgba(99, 102, 241, 0.8);
+            flex: none;
+        }
+
+        .mark svg {
+            width: 24px;
+            height: 24px;
+            stroke: #0a0f1e;
+        }
+
+        h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2rem, 6vw, 2.7rem);
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            line-height: 1;
+            background: var(--grad-text);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .tagline {
+            color: var(--ink-mute);
+            font-size: 0.9rem;
+            letter-spacing: 0.01em;
+        }
+
+        .stats {
+            display: flex;
+            gap: 0.6rem;
+            flex-wrap: wrap;
+        }
+
+        .chip {
+            display: inline-flex;
+            align-items: baseline;
+            gap: 0.45rem;
+            padding: 0.5rem 0.9rem;
+            border-radius: 999px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            font-size: 0.8rem;
+            color: var(--ink-soft);
+        }
+
+        .chip b {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--ink);
+        }
+
+        .chip .dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            align-self: center;
+        }
+
+        .chip.active .dot {
+            background: var(--cyan);
+            box-shadow: 0 0 10px var(--cyan);
+        }
+
+        .chip.done .dot {
+            background: var(--emerald);
+            box-shadow: 0 0 10px var(--emerald);
+        }
+
+        /* ===================== Glass card shell ===================== */
+        .glass {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            backdrop-filter: blur(16px) saturate(1.4);
+            -webkit-backdrop-filter: blur(16px) saturate(1.4);
+        }
+
+        /* ===================== Add form ===================== */
+        .composer {
+            padding: 0.55rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.55rem;
+            transition: box-shadow 0.35s var(--ease), border-color 0.35s var(--ease);
+        }
+
+        .composer:focus-within {
+            border-color: transparent;
+            box-shadow: var(--shadow-glow), 0 0 0 1.5px rgba(139, 92, 246, 0.7);
+        }
+
+        .composer-row {
+            display: flex;
+            gap: 0.55rem;
+        }
+
+        .field {
+            flex: 1;
+            border: none;
+            background: transparent;
+            color: var(--ink);
+            font: inherit;
+            font-size: 1rem;
+            padding: 0.85rem 0.95rem;
+            border-radius: var(--radius-sm);
+        }
+
+        .field::placeholder {
+            color: var(--ink-mute);
+        }
+
+        .field:focus {
+            outline: none;
+        }
+
+        #task-detail {
+            font-size: 0.9rem;
+            color: var(--ink-soft);
+            padding-top: 0;
+        }
+
+        .add-btn {
+            flex: none;
+            border: none;
+            cursor: pointer;
+            width: 52px;
+            border-radius: var(--radius-sm);
+            background: var(--grad-accent);
+            color: #0a0f1e;
+            display: grid;
+            place-items: center;
+            transition: transform 0.2s var(--ease), filter 0.2s var(--ease), box-shadow 0.2s var(--ease);
+            box-shadow: 0 8px 20px -8px rgba(99, 102, 241, 0.9);
+        }
+
+        .add-btn svg {
+            width: 22px;
+            height: 22px;
+            stroke: #0a0f1e;
+        }
+
+        .add-btn:hover {
+            transform: translateY(-1px) scale(1.03);
+            filter: brightness(1.08);
+        }
+
+        .add-btn:active {
+            transform: scale(0.96);
+        }
+
+        /* ===================== Filters ===================== */
+        .toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .filters {
+            display: inline-flex;
+            padding: 0.3rem;
+            gap: 0.2rem;
+            border-radius: 999px;
+        }
+
+        .filter {
+            border: none;
+            cursor: pointer;
+            background: transparent;
+            color: var(--ink-mute);
+            font: inherit;
+            font-size: 0.85rem;
+            font-weight: 500;
+            padding: 0.45rem 1rem;
+            border-radius: 999px;
+            transition: color 0.25s, background 0.25s;
+        }
+
+        .filter:hover {
+            color: var(--ink-soft);
+        }
+
+        .filter.is-active {
+            color: #0a0f1e;
+            background: var(--grad-accent);
+            box-shadow: 0 6px 16px -8px rgba(99, 102, 241, 0.9);
+        }
+
+        .clear-done {
+            border: none;
+            background: transparent;
+            color: var(--ink-mute);
+            font: inherit;
+            font-size: 0.82rem;
+            cursor: pointer;
+            padding: 0.4rem 0.2rem;
+            transition: color 0.2s;
+        }
+
+        .clear-done:hover {
+            color: var(--magenta);
+        }
+
+        .clear-done[hidden] {
+            display: none;
+        }
+
+        /* ===================== Task list ===================== */
+        .list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.7rem;
+        }
+
+        .task {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.85rem;
+            padding: 0.95rem 1rem;
+            animation: rise 0.45s var(--ease) both;
+            transition: transform 0.25s var(--ease), box-shadow 0.3s var(--ease), border-color 0.3s var(--ease), opacity 0.3s;
+        }
+
+        .task:hover {
+            transform: translateY(-2px);
+            border-color: var(--border-strong);
+            box-shadow: 0 18px 40px -26px rgba(34, 211, 238, 0.7);
+        }
+
+        .task.leaving {
+            opacity: 0;
+            transform: translateX(24px);
+        }
+
+        .check {
+            flex: none;
+            width: 24px;
+            height: 24px;
+            margin-top: 1px;
+            border-radius: 8px;
+            border: 1.5px solid var(--border-strong);
+            background: transparent;
+            cursor: pointer;
+            display: grid;
+            place-items: center;
+            transition: border-color 0.2s, background 0.25s var(--ease);
+        }
+
+        .check svg {
+            width: 14px;
+            height: 14px;
+            stroke: #06210f;
+            stroke-width: 3.2;
+            opacity: 0;
+            transform: scale(0.5);
+            transition: opacity 0.2s, transform 0.25s var(--ease);
+        }
+
+        .check:hover {
+            border-color: var(--emerald);
+        }
+
+        .task.completed .check {
+            background: linear-gradient(135deg, #34d399, #22d3ee);
+            border-color: transparent;
+        }
+
+        .task.completed .check svg {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .body {
+            flex: 1;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 0.15rem;
+        }
+
+        .title {
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--ink);
+            word-break: break-word;
+            transition: color 0.3s, opacity 0.3s;
+        }
+
+        .detail {
+            font-size: 0.85rem;
+            color: var(--ink-mute);
+            word-break: break-word;
+        }
+
+        .task.completed .title {
+            color: var(--ink-mute);
+            text-decoration: line-through;
+            text-decoration-color: rgba(52, 211, 153, 0.7);
+        }
+
+        .task.completed .detail {
+            opacity: 0.55;
+        }
+
+        .actions {
+            flex: none;
+            display: flex;
+            gap: 0.25rem;
+            opacity: 0;
+            transform: translateX(4px);
+            transition: opacity 0.2s, transform 0.2s;
+        }
+
+        .task:hover .actions,
+        .task:focus-within .actions {
+            opacity: 1;
+            transform: none;
+        }
+
+        .icon-btn {
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            width: 32px;
+            height: 32px;
+            border-radius: 9px;
+            color: var(--ink-mute);
+            display: grid;
+            place-items: center;
+            transition: background 0.2s, color 0.2s;
+        }
+
+        .icon-btn svg {
+            width: 16px;
+            height: 16px;
+            stroke: currentColor;
+        }
+
+        .icon-btn:hover {
+            background: var(--surface-strong);
+            color: var(--ink);
+        }
+
+        .icon-btn.danger:hover {
+            color: var(--magenta);
+        }
+
+        /* Inline edit inputs reuse task layout */
+        .edit-field {
+            border: none;
+            background: rgba(255, 255, 255, 0.06);
+            color: var(--ink);
+            font: inherit;
+            border-radius: 8px;
+            padding: 0.4rem 0.55rem;
+            width: 100%;
+        }
+
+        .edit-field:focus {
+            outline: 1.5px solid var(--violet);
+        }
+
+        .edit-field.detail-edit {
+            font-size: 0.85rem;
+            margin-top: 0.3rem;
+            color: var(--ink-soft);
+        }
+
+        /* ===================== States ===================== */
+        .empty {
+            text-align: center;
+            padding: 3rem 1.5rem;
+            color: var(--ink-mute);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .empty[hidden],
+        .list[hidden] {
+            display: none;
+        }
+
+        .empty .halo {
+            width: 74px;
+            height: 74px;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            background: radial-gradient(circle at 50% 40%, rgba(139, 92, 246, 0.35), transparent 70%);
+            border: 1px solid var(--border);
+        }
+
+        .empty .halo svg {
+            width: 32px;
+            height: 32px;
+            stroke: var(--ink-soft);
+        }
+
+        .empty h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 600;
+            color: var(--ink-soft);
+            font-size: 1.05rem;
+        }
+
+        .empty p {
+            font-size: 0.88rem;
+            max-width: 32ch;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 2.5rem;
+            color: var(--ink-mute);
+            font-size: 0.9rem;
+        }
+
+        .loading[hidden] {
+            display: none;
+        }
+
+        /* ===================== Toasts ===================== */
+        .toasts {
+            position: fixed;
+            bottom: 1.4rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            z-index: 50;
+            width: min(92vw, 380px);
+        }
+
+        .toast {
+            padding: 0.8rem 1rem;
+            border-radius: 12px;
+            font-size: 0.88rem;
+            color: var(--ink);
+            background: rgba(17, 22, 40, 0.9);
+            border: 1px solid var(--border-strong);
+            backdrop-filter: blur(12px);
+            box-shadow: 0 16px 40px -18px rgba(0, 0, 0, 0.8);
+            animation: toastIn 0.35s var(--ease) both;
+        }
+
+        .toast.error {
+            border-color: rgba(236, 72, 153, 0.55);
+        }
+
+        @keyframes rise {
+            from {
+                opacity: 0;
+                transform: translateY(14px);
+            }
+
+            to {
+                opacity: 1;
+                transform: none;
+            }
+        }
+
+        @keyframes toastIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: none;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <main class="app">
+        <header class="masthead">
+            <div class="brand">
+                <span class="mark" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M4 13a8 8 0 0 1 16 0" />
+                        <path d="M12 5v-1M4.2 13H3M21 13h-1.2M6.3 7.3l-.8-.8M17.7 7.3l.8-.8" />
+                        <path d="M9 17l2 2 4-4" />
+                    </svg>
+                </span>
+                <div>
+                    <h1>Aurora</h1>
+                    <p class="tagline">A calmer place for your day's work.</p>
+                </div>
+            </div>
+            <div class="stats">
+                <span class="chip active"><span class="dot"></span><b id="count-active">0</b> active</span>
+                <span class="chip done"><span class="dot"></span><b id="count-done">0</b> done</span>
+            </div>
+        </header>
+
+        <form class="glass composer" id="add-form" autocomplete="off">
+            <div class="composer-row">
+                <input class="field" id="task-title" type="text" placeholder="What needs doing?"
+                    aria-label="Task title" maxlength="160" required>
+                <button class="add-btn" type="submit" aria-label="Add task">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round">
+                        <path d="M12 5v14M5 12h14" />
+                    </svg>
+                </button>
+            </div>
+            <input class="field" id="task-detail" type="text" placeholder="Add a detail (optional)"
+                aria-label="Task detail" maxlength="240">
+        </form>
+
+        <div class="toolbar">
+            <div class="glass filters" role="tablist" aria-label="Filter tasks">
+                <button class="filter is-active" data-filter="all" role="tab">All</button>
+                <button class="filter" data-filter="active" role="tab">Active</button>
+                <button class="filter" data-filter="done" role="tab">Done</button>
+            </div>
+            <button class="clear-done" id="clear-done" hidden>Clear done</button>
+        </div>
+
+        <p class="loading" id="loading">Summoning your tasks…</p>
+
+        <ul class="list" id="todo-list" hidden></ul>
+
+        <div class="empty" id="empty-state" hidden>
+            <span class="halo" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <path d="M9 11l3 3L22 4" />
+                    <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
+                </svg>
+            </span>
+            <h3 id="empty-title">All clear</h3>
+            <p id="empty-text">Add your first task above and watch it come to life.</p>
+        </div>
+    </main>
+
+    <div class="toasts" id="toasts" aria-live="polite"></div>
+</body>
+
+</html>
