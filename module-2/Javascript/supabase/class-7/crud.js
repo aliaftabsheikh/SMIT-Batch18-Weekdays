@@ -1,25 +1,37 @@
 import { supabase } from "./supabaseClient.js"
 
 /**
- * Aurora — a small todo app backed by the Supabase `notes` table.
+ * Aurora — a small Kanban todo board backed by the Supabase `notes` table.
  *
- * Column mapping (we reuse the existing table, no schema changes):
- *   title    -> the task text
+ * Column mapping:
+ *   title    -> the card text
  *   content  -> an optional detail line
- *   is_done  -> completed state
+ *   status   -> Kanban stage: 'todo' | 'doing' | 'done'
+ *   is_done  -> kept in sync with status (true when status === 'done')
  */
 
 const TABLE = 'notes'
-const PAGE_SIZE = 5   // how many todos to show per page
+const BUCKET = 'batch18'            // Supabase Storage bucket for note photos
+const MAX_IMAGE_BYTES = 5 * 1024 * 1024   // 5 MB upload cap
+
+// The board's columns, in order. [statusKey, column label]
+const STAGES = [
+    ['todo', 'To Do'],
+    ['doing', 'In Progress'],
+    ['done', 'Done'],
+]
+
+// Normalize a row's stage (older rows may lack `status`; fall back to is_done).
+const stageOf = (t) => t.status ?? (t.is_done ? 'done' : 'todo')
 
 /* ----------------------------- App state ----------------------------- */
 const state = {
     todos: [],        // rows loaded from Supabase
-    filter: 'all',    // 'all' | 'active' | 'done'
-    editingId: null,  // id of the task currently in inline-edit mode
+    editingId: null,  // id of the card currently in inline-edit mode
     search: '',           // current search query text
     searchResults: null,  // null = not searching; array = DB matches
-    page: 1,              // current page (1-based)
+    userId: null,         // id of the currently logged-in user
+    draggingId: null,     // id of the card currently being dragged
 }
 
 /* --------------------------- DOM references -------------------------- */
@@ -27,21 +39,21 @@ const els = {
     form: document.getElementById('add-form'),
     title: document.getElementById('task-title'),
     detail: document.getElementById('task-detail'),
+    addBtn: document.getElementById('add-btn'),
+    // Photo attachment (add-note form)
+    photo: document.getElementById('task-photo'),
+    attachBtn: document.getElementById('attach-btn'),
+    attachPreview: document.getElementById('attach-preview'),
+    attachThumb: document.getElementById('attach-thumb'),
+    attachName: document.getElementById('attach-name'),
+    attachClear: document.getElementById('attach-clear'),
     search: document.getElementById('search-input'),
-    list: document.getElementById('todo-list'),
-    empty: document.getElementById('empty-state'),
-    emptyTitle: document.getElementById('empty-title'),
-    emptyText: document.getElementById('empty-text'),
+    board: document.getElementById('board'),
     loading: document.getElementById('loading'),
     countActive: document.getElementById('count-active'),
     countDone: document.getElementById('count-done'),
-    filters: document.querySelectorAll('.filter'),
     clearDone: document.getElementById('clear-done'),
     toasts: document.getElementById('toasts'),
-    pager: document.getElementById('pager'),
-    pagePrev: document.getElementById('page-prev'),
-    pageNext: document.getElementById('page-next'),
-    pageInfo: document.getElementById('page-info'),
     // Auth
     app: document.querySelector('.app'),
     authScreen: document.getElementById('auth-screen'),
@@ -65,9 +77,11 @@ async function loadTodos() {
     const { data, error } = await supabase
         .from(TABLE)
         .select('*')
+        .eq('user_id', state.userId)     // only this user's todos
         .order('id', { ascending: true })
 
     els.loading.hidden = true
+    els.board.hidden = false
 
     if (error) {
         console.error('Error fetching tasks:', error.message)
@@ -75,14 +89,14 @@ async function loadTodos() {
         return
     }
     state.todos = data
-    render()
+    renderBoard()
 }
 
-//! CREATE — add a new task
-async function addTodo(title, content) {
+//! CREATE — add a new card (always lands in the To Do column)
+async function addTodo(title, content, imageUrl = null) {
     const { data, error } = await supabase
         .from(TABLE)
-        .insert({ title, content, is_done: false })
+        .insert({ title, content, is_done: false, status: 'todo', user_id: state.userId, image_url: imageUrl })
         .select()
 
     if (error) {
@@ -91,24 +105,60 @@ async function addTodo(title, content) {
         return
     }
     state.todos.push(data[0])
-    render()
+    renderBoard()
 }
 
-//! UPDATE — flip the completed state
-async function toggleTodo(id, isDone) {
+//! STORAGE — upload a photo to the public `batch18` bucket and return its URL.
+//  Browser-side version of upload.js: a unique per-user path avoids collisions.
+async function uploadImage(file) {
+    if (!validateImage(file)) return null
+
+    const ext = (file.name.split('.').pop() || 'jpg').toLowerCase()
+    const path = `notes/${state.userId}/${Date.now()}-${crypto.randomUUID()}.${ext}`
+
+    const { error } = await supabase.storage
+        .from(BUCKET)
+        .upload(path, file, { contentType: file.type, upsert: false })
+
+    if (error) {
+        console.error('Error uploading photo:', error.message)
+        toast("Couldn't upload the photo. Try again.", 'error')
+        return null
+    }
+
+    // Bucket is public, so the public URL loads directly.
+    const { data } = supabase.storage.from(BUCKET).getPublicUrl(path)
+    return data.publicUrl
+}
+
+// Guard: only images, and only up to the size cap.
+function validateImage(file) {
+    if (!file.type.startsWith('image/')) {
+        toast('Please choose an image file.', 'error')
+        return false
+    }
+    if (file.size > MAX_IMAGE_BYTES) {
+        toast('That image is over 5 MB. Pick a smaller one.', 'error')
+        return false
+    }
+    return true
+}
+
+//! UPDATE — move a card to another column (status), keeping is_done in sync
+async function moveTodo(id, status) {
     const { data, error } = await supabase
         .from(TABLE)
-        .update({ is_done: isDone })
+        .update({ status, is_done: status === 'done' })
         .eq('id', id)
         .select()
 
     if (error) {
-        console.error('Error updating task:', error.message)
-        toast("Couldn't update that task.", 'error')
+        console.error('Error moving card:', error.message)
+        toast("Couldn't move that card.", 'error')
         return
     }
     replaceInState(data[0])
-    render()
+    renderBoard()
 }
 
 //! UPDATE — save edited title / detail
@@ -126,7 +176,7 @@ async function editTodo(id, title, content) {
     }
     replaceInState(data[0])
     state.editingId = null
-    render()
+    renderBoard()
 }
 
 //! DELETE — remove a single task
@@ -139,11 +189,11 @@ async function deleteTodo(id) {
     if (error) {
         console.error('Error deleting task:', error.message)
         toast("Couldn't delete that task.", 'error')
-        render() // undo the leaving animation
+        renderBoard() // undo the leaving animation
         return
     }
     state.todos = state.todos.filter(t => t.id !== id)
-    render()
+    renderBoard()
 }
 
 //! DELETE — clear all completed tasks at once
@@ -162,80 +212,51 @@ async function clearCompleted() {
         return
     }
     state.todos = state.todos.filter(t => !t.is_done)
-    render()
+    renderBoard()
     toast(`Cleared ${doneIds.length} completed ${doneIds.length === 1 ? 'task' : 'tasks'}.`)
 }
 
 /* ============================== Rendering ============================= */
 
-function render() {
-    const active = state.todos.filter(t => !t.is_done).length
-    const done = state.todos.length - active
+function renderBoard() {
+    // When searching, show the DB matches; otherwise the full list.
+    const source = state.searchResults ?? state.todos
 
-    els.countActive.textContent = active
+    const done = state.todos.filter(t => stageOf(t) === 'done').length
+    els.countActive.textContent = state.todos.length - done
     els.countDone.textContent = done
     els.clearDone.hidden = done === 0
 
-    // Highlight the active filter tab
-    els.filters.forEach(btn =>
-        btn.classList.toggle('is-active', btn.dataset.filter === state.filter))
+    // Fill each column with its cards.
+    for (const [status, label] of STAGES) {
+        const list = els.board.querySelector(`.col-list[data-status="${status}"]`)
+        const cards = source.filter(t => stageOf(t) === status)
 
-    // When searching, render the DB matches; otherwise the full list.
-    const source = state.searchResults ?? state.todos
-    const visible = source.filter(t => {
-        if (state.filter === 'active') return !t.is_done
-        if (state.filter === 'done') return t.is_done
-        return true
-    })
+        list.innerHTML = ''
+        for (const todo of cards) list.appendChild(buildTask(todo))
 
-    // --- Pagination (client-side): show PAGE_SIZE todos per page ---
-    const totalPages = Math.max(1, Math.ceil(visible.length / PAGE_SIZE))
-    if (state.page > totalPages) state.page = totalPages   // clamp after deletes/filter/search
-    if (state.page < 1) state.page = 1
-    const start = (state.page - 1) * PAGE_SIZE
-    const pageItems = visible.slice(start, start + PAGE_SIZE)
+        // Empty-column placeholder (also keeps the area as a drop target).
+        if (cards.length === 0) {
+            const hint = document.createElement('li')
+            hint.className = 'col-empty'
+            hint.textContent = state.searchResults ? 'No matches here' : 'Drop cards here'
+            list.appendChild(hint)
+        }
 
-    els.list.innerHTML = ''
-    for (const todo of pageItems) els.list.appendChild(buildTask(todo))
-
-    const isEmpty = visible.length === 0
-    els.list.hidden = isEmpty
-    els.empty.hidden = !isEmpty
-    if (isEmpty) setEmptyCopy()
-
-    renderPager(totalPages)
-}
-
-function renderPager(totalPages) {
-    els.pager.hidden = totalPages <= 1   // hide when everything fits on one page
-    els.pageInfo.textContent = `Page ${state.page} of ${totalPages}`
-    els.pagePrev.disabled = state.page <= 1
-    els.pageNext.disabled = state.page >= totalPages
-}
-
-function setEmptyCopy() {
-    // No results for an active search gets its own message.
-    if (state.searchResults) {
-        els.emptyTitle.textContent = 'No matches'
-        els.emptyText.textContent = `No tasks match “${state.search}”.`
-        return
+        // Per-column count in the header.
+        els.board.querySelector(`.col-count[data-count="${status}"]`).textContent = cards.length
     }
-    const copy = {
-        all: ['All clear', "Add your first task above and watch it come to life."],
-        active: ['Inbox zero', "Nothing active right now. Enjoy the calm."],
-        done: ['Nothing done yet', "Completed tasks will collect here."],
-    }[state.filter]
-    els.emptyTitle.textContent = copy[0]
-    els.emptyText.textContent = copy[1]
 }
 
 function buildTask(todo) {
+    const isDone = stageOf(todo) === 'done'
     const li = document.createElement('li')
-    li.className = 'glass task' + (todo.is_done ? ' completed' : '')
+    li.className = 'glass task' + (isDone ? ' completed' : '')
     li.dataset.id = todo.id
 
-    // Inline-edit view
+    // Inline-edit view — not draggable, so text selection works while editing.
     if (state.editingId === todo.id) {
+        li.draggable = false
         li.innerHTML = `
             <div class="body">
                 <input class="edit-field" data-edit="title" value="${escapeHtml(todo.title ?? '')}" maxlength="160" />
@@ -248,12 +269,17 @@ function buildTask(todo) {
         return li
     }
 
-    // Normal view
+    // Normal view — draggable card
+    li.draggable = true
     const detail = todo.content
         ? `<span class="detail">${escapeHtml(todo.content)}</span>`
         : ''
+    const photo = todo.image_url
+        ? `<img class="task-photo" src="${escapeHtml(todo.image_url)}" alt="" loading="lazy">`
+        : ''
     li.innerHTML = `
-        <button class="check" data-action="toggle" aria-label="Toggle complete" aria-pressed="${todo.is_done}">
+        ${photo}
+        <button class="check" data-action="toggle" aria-label="Toggle complete" aria-pressed="${isDone}">
             ${icon.check}
         </button>
         <div class="body">
@@ -269,54 +295,78 @@ function buildTask(todo) {
 
 /* ============================ Interactions =========================== */
 
-// Add task
-els.form.addEventListener('submit', (e) => {
+// Add task (uploads the attached photo first, if any)
+els.form.addEventListener('submit', async (e) => {
     e.preventDefault()
     const title = els.title.value.trim()
     if (!title) return
     const content = els.detail.value.trim() || null
-    addTodo(title, content)
+    const file = els.photo.files[0]
+
+    let imageUrl = null
+    if (file) {
+        els.addBtn.classList.add('is-busy')      // spinner while uploading
+        imageUrl = await uploadImage(file)
+        els.addBtn.classList.remove('is-busy')
+        if (!imageUrl) return                    // upload failed — keep the form as-is
+    }
+
+    await addTodo(title, content, imageUrl)
     els.form.reset()
+    clearPhoto()
     els.title.focus()
 })
 
-// Filter tabs
-els.filters.forEach(btn =>
-    btn.addEventListener('click', () => {
-        state.filter = btn.dataset.filter
-        state.page = 1              // start filtered results from page 1
-        render()
-    }))
+// Show a preview when a photo is chosen
+els.photo.addEventListener('change', () => {
+    const file = els.photo.files[0]
+    if (!file) { clearPhoto(); return }
+    if (!validateImage(file)) { clearPhoto(); return }
 
-// Pagination — step between pages
-els.pagePrev.addEventListener('click', () => { state.page--; render() })
-els.pageNext.addEventListener('click', () => { state.page++; render() })
+    if (els.attachThumb.src) URL.revokeObjectURL(els.attachThumb.src)
+    els.attachThumb.src = URL.createObjectURL(file)
+    els.attachName.textContent = file.name
+    els.attachPreview.hidden = false
+    els.attachBtn.classList.add('has-file')
+})
+
+// Remove the chosen photo
+els.attachClear.addEventListener('click', clearPhoto)
+
+function clearPhoto() {
+    els.photo.value = ''
+    if (els.attachThumb.src) {
+        URL.revokeObjectURL(els.attachThumb.src)
+        els.attachThumb.removeAttribute('src')
+    }
+    els.attachName.textContent = ''
+    els.attachPreview.hidden = true
+    els.attachBtn.classList.remove('has-file')
+}
 
 // Search — query the database as the user types (debounced)
 let searchTimer
 els.search.addEventListener('input', () => {
     const q = els.search.value.trim()
     clearTimeout(searchTimer)
-    if (!q) {                        // cleared -> show the full list again
+    if (!q) {                        // cleared -> show the full board again
         state.search = ''
         state.searchResults = null
-        state.page = 1
-        render()
+        renderBoard()
         return
     }
     searchTimer = setTimeout(async () => {
         state.search = q
         state.searchResults = await findByText(q)
-        state.page = 1               // show search results from page 1
-        render()
+        renderBoard()
     }, 300)
 })
 
 // Clear completed
 els.clearDone.addEventListener('click', clearCompleted)
 
-// Delegated actions on the task list
-els.list.addEventListener('click', (e) => {
+// Delegated actions on the board's cards
+els.board.addEventListener('click', (e) => {
     const btn = e.target.closest('[data-action]')
     if (!btn) return
     const li = btn.closest('.task')
@@ -324,12 +374,12 @@ els.list.addEventListener('click', (e) => {
     const todo = state.todos.find(t => t.id === id)
 
     switch (btn.dataset.action) {
-        case 'toggle':
-            if (todo) toggleTodo(id, !todo.is_done)
+        case 'toggle':   // the check button flips a card between Done and To Do
+            if (todo) moveTodo(id, stageOf(todo) === 'done' ? 'todo' : 'done')
             break
         case 'edit':
             state.editingId = id
-            render()
+            renderBoard()
             focusEdit(id)
             break
         case 'delete':
@@ -341,13 +391,13 @@ els.list.addEventListener('click', (e) => {
             break
         case 'cancel':
             state.editingId = null
-            render()
+            renderBoard()
             break
     }
 })
 
 // Keyboard support inside inline-edit fields (Enter = save, Esc = cancel)
-els.list.addEventListener('keydown', (e) => {
+els.board.addEventListener('keydown', (e) => {
     if (state.editingId === null) return
     const li = e.target.closest('.task')
     if (!li) return
@@ -356,9 +406,55 @@ els.list.addEventListener('keydown', (e) => {
         commitEdit(li, Number(li.dataset.id))
     } else if (e.key === 'Escape') {
         state.editingId = null
-        render()
+        renderBoard()
     }
 })
+
+/* ------------------------- Drag & drop (native HTML5) ------------------------- */
+
+// Which card is being dragged (delegated on the board).
+els.board.addEventListener('dragstart', (e) => {
+    const card = e.target.closest('.task')
+    if (!card) return
+    state.draggingId = Number(card.dataset.id)
+    e.dataTransfer.effectAllowed = 'move'
+    e.dataTransfer.setData('text/plain', card.dataset.id)   // Firefox needs data set
+    card.classList.add('dragging')
+})
+
+els.board.addEventListener('dragend', (e) => {
+    e.target.closest('.task')?.classList.remove('dragging')
+    state.draggingId = null
+    clearDropTargets()
+})
+
+// Allow dropping onto a column's list and highlight it.
+els.board.addEventListener('dragover', (e) => {
+    const list = e.target.closest('.col-list')
+    if (!list) return
+    e.preventDefault()                       // required to allow a drop
+    e.dataTransfer.dropEffect = 'move'
+    if (!list.classList.contains('drop-target')) {
+        clearDropTargets()
+        list.classList.add('drop-target')
+    }
+})
+
+els.board.addEventListener('drop', (e) => {
+    const list = e.target.closest('.col-list')
+    if (!list) return
+    e.preventDefault()
+    clearDropTargets()
+    const id = state.draggingId
+    const status = list.dataset.status
+    const todo = state.todos.find(t => t.id === id)
+    if (todo && stageOf(todo) !== status) moveTodo(id, status)   // only if the column changed
+})
+
+function clearDropTargets() {
+    els.board.querySelectorAll('.col-list.drop-target')
+        .forEach(l => l.classList.remove('drop-target'))
+}
 
 function commitEdit(li, id) {
     const title = li.querySelector('[data-edit="title"]').value.trim()
@@ -371,7 +467,7 @@ function commitEdit(li, id) {
 }
 
 function focusEdit(id) {
-    const input = els.list.querySelector(`.task[data-id="${id}"] [data-edit="title"]`)
+    const input = els.board.querySelector(`.task[data-id="${id}"] [data-edit="title"]`)
     if (input) {
         input.focus()
         input.setSelectionRange(input.value.length, input.value.length)
@@ -426,8 +522,6 @@ function showAuth(show) {
 function resetView() {
     state.search = ''
     state.searchResults = null
-    state.filter = 'all'
-    state.page = 1
     els.search.value = ''
 }
 
@@ -476,14 +570,16 @@ els.signOut.addEventListener('click', () => supabase.auth.signOut())
 supabase.auth.onAuthStateChange((event, session) => {
     const user = session?.user
     if (user) {
+        state.userId = user.id       // remember who's logged in for inserts/queries
         els.userEmail.textContent = user.email
         showAuth(false)
         resetView()
-        loadTodos()          // RLS returns only THIS user's rows
+        loadTodos()          // loads only THIS user's rows
     } else {
+        state.userId = null
         showAuth(true)
         state.todos = []
-        render()
+        renderBoard()
     }
 })
 
@@ -493,7 +589,11 @@ supabase.auth.onAuthStateChange((event, session) => {
 
 
 async function findByText(text) {
-    const { data, error } = await supabase.from(TABLE).select('*').ilike('title', `%${text}%`)
+    const { data, error } = await supabase
+        .from(TABLE)
+        .select('*')
+        .eq('user_id', state.userId)     // search only this user's todos
+        .ilike('title', `%${text}%`)
 
     if (error) {
         console.error('Error searching tasks:', error.message)
@@ -509,73 +609,16 @@ async function findByText(text) {
 
 
 
-async function paginatedTodos(page = 1, pageSize = 3) {
-    const { data, error } = await supabase.from(TABLE).select('*')
-        .order('created_at', { ascending: false })  // newest first
-        .limit(pageSize)
-
-    if (error) {
-        console.error('Error fetching paginated tasks:', error.message)
-    }
-    return data
-}
 
 
 
-// --------------------------- AUTHENTICATION ------------------------------
 
 
 
-async function userSignUp(email, password) {
-    const { data, error } = await supabase.auth.signUp({
-        email: email,
-        password: password
-    })
-
-    if (error) {
-        console.error('Error signing up:', error.message)
-        toast("Couldn't sign you up. Try a different email or check your password.", 'error')
-        return
-    }
-    console.log('Signed up successfully:', data)
-}
-
-userSignUp('a@example.com', '12345678')  // removed: was triggering on every page load and hitting the email rate limit
 
 
 
-async function userSignIn() {
-    const { data, error } = await supabase.auth.signInWithPassword({
-        email: 'courseviewer123@gmail.com',
-        password: '12345678',
-    })
 
-    if(error) {
-        console.error('Error logging in:', error.message)
-        toast("Couldn't log in. Check the credentials and try again.", 'error')
-        return
-    }
-    console.log('Logged in successfully:', data)
-}
-// userSignIn()
-
-
-async function userSignOut() {
-    await supabase.auth.signOut()
-        .then(() => {
-            console.log('Logged out successfully')
-        })
-        .catch((error) => {
-            console.error('Error logging out:', error.message)
-            toast("Couldn't log you out. Try again.", 'error')
-        })
-}
-
-userSignOut()
-
-async function userLoggedIn() {
-    const { data: { user } } = await supabase.auth.getUser()
-console.log(user)
-}
-
-userLoggedIn()
+// =========================== FILE UPLOAD ================================
+// Moved to upload.js — Node scripts can't import supabaseClient.js because it
+// loads Supabase from a browser CDN URL. Run: node upload.js
