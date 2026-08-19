@@ -1,0 +1,21 @@
+.rating {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--ink-soft);
+  font-size: var(--text-xs);
+  font-weight: 720;
+  line-height: 1;
+}
+
+.rating__stars {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  color: var(--signal);
+}
+
+.rating__reviews {
+  color: var(--muted);
+  font-weight: 620;
+}
