@@ -1,0 +1,131 @@
+#root,
+.app {
+  min-height: 100vh;
+}
+
+.app {
+  overflow-x: clip;
+}
+
+.content-shell {
+  width: min(calc(100% - 64px), 1320px);
+  margin: 0 auto;
+}
+
+.section {
+  padding: var(--space-9) 0;
+}
+
+#home,
+#shop,
+#stories,
+#contact {
+  scroll-margin-top: 76px;
+}
+
+.section-heading {
+  max-width: 620px;
+}
+
+.section-heading--center {
+  margin: 0 auto;
+  text-align: center;
+}
+
+.section-heading__eyebrow {
+  margin-bottom: var(--space-3);
+  color: var(--signal);
+  font-size: var(--text-xs);
+  font-weight: 800;
+}
+
+.section-heading h2 {
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  font-weight: 400;
+  line-height: 1.02;
+}
+
+.section-heading > p:last-child {
+  margin-top: var(--space-4);
+  color: var(--muted);
+  font-size: var(--text-base);
+  line-height: 1.7;
+}
+
+.catalog {
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  background: var(--paper-light);
+}
+
+.catalog__header {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: var(--space-6);
+}
+
+.catalog__count {
+  max-width: 180px;
+  color: var(--muted);
+  font-size: var(--text-xs);
+  font-weight: 720;
+  line-height: 1.5;
+  text-align: right;
+}
+
+.catalog__grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--space-5);
+  margin-top: var(--space-7);
+}
+
+@media (max-width: 1120px) {
+  .catalog__grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 700px) {
+  .section {
+    padding: var(--space-8) 0;
+  }
+
+  .content-shell {
+    width: min(calc(100% - 40px), 1320px);
+  }
+
+  .catalog__header {
+    align-items: start;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .catalog__count {
+    max-width: none;
+    text-align: left;
+  }
+
+  .catalog__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-4);
+    margin-top: var(--space-6);
+  }
+}
+
+@media (max-width: 480px) {
+  .content-shell {
+    width: min(calc(100% - 32px), 1320px);
+  }
+
+  .section {
+    padding: var(--space-7) 0;
+  }
+
+  .catalog__grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

@@ -1,0 +1,111 @@
+:root {
+  --paper: #f5f1e8;
+  --paper-deep: #e9e1d2;
+  --paper-light: #fffdf8;
+  --ink: #171614;
+  --ink-soft: #403d37;
+  --muted: #777168;
+  --line: #d4ccbd;
+  --lime: #d7ff3f;
+  --lime-deep: #b7dd21;
+  --signal: #e53b27;
+  --signal-deep: #bd2718;
+  --white: #ffffff;
+  --font-display: "DM Serif Display", Georgia, serif;
+  --font-ui: "Manrope Variable", "Avenir Next", sans-serif;
+  --font-body: var(--font-ui);
+  --text-xs: 0.72rem;
+  --text-sm: 0.84rem;
+  --text-base: 0.98rem;
+  --text-lg: 1.15rem;
+  --text-xl: 2.75rem;
+  --text-hero: 7rem;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4rem;
+  --space-9: 6rem;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --shadow-raised: 0 16px 34px rgba(23, 22, 20, 0.1);
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --duration-fast: 160ms;
+  --duration-medium: 280ms;
+  color: var(--ink);
+  background: var(--paper);
+  font-family: var(--font-body);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100vh;
+  background: var(--paper);
+  color: var(--ink);
+  font-size: var(--text-base);
+  line-height: 1.5;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+:focus-visible {
+  outline: 3px solid var(--signal);
+  outline-offset: 3px;
+}
+
+::selection {
+  background: var(--lime);
+  color: var(--ink);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@media (max-width: 700px) {
+  :root {
+    --text-xl: 2rem;
+    --text-hero: 4.25rem;
+  }
+}
+
+@media (max-width: 420px) {
+  :root {
+    --text-hero: 3.5rem;
+  }
+}
