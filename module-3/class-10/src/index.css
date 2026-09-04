@@ -1,0 +1,18 @@
+@import "tailwindcss";
+
+:root {
+	--font-interface: "Avenir Next", "Segoe UI", sans-serif;
+	--font-display: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Palatino, serif;
+}
+
+@keyframes card-enter {
+	from {
+		opacity: 0;
+		transform: translateY(1rem);
+	}
+
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
