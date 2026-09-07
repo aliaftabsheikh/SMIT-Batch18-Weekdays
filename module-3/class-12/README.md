@@ -1,0 +1,1 @@
+HOME WORK : https://tailwindcss.com/docs/responsive-design#using-custom-breakpoints
