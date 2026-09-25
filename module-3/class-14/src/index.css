@@ -1,0 +1,82 @@
+@import "tailwindcss";
+
+
+@layer base {
+  h1{
+    font-size: var(--text-3xl);
+  }
+
+  h2{
+    font-size: var(--text-2xl);
+  }
+
+  h3{
+    font-size: var(--text-xl) ;
+  }
+
+  h4{
+    font-size: var(--text-lg);
+  }
+
+  h5{
+    font-size: var(--text-md);
+  }
+
+  h6{
+    font-size: var(--text-sm);
+  }
+
+  p{
+        font-size: 16px;
+  }
+
+  ul{
+    list-style-type: disc;
+    color: yellow;
+  }
+}
+
+/* @theme {
+  --color-avocado-100: oklch(0.99 0 0);
+  --color-avocado-500: oklch(0.84 0.18 117.33);
+  --color-avocado-600: oklch(0.53 0.12 118.34);
+  --font-display: "Satoshi", sans-serif;
+  --breakpoint-3xl: 120rem;
+  --ease-snappy: cubic-bezier(0.2, 0, 0, 1);
+} */
+
+
+@layer components{
+/* .card {
+    background-color: var(--color-white);
+    border-radius: var(--radius-lg);
+    padding: --spacing(6);
+    box-shadow: var(--shadow-xl);
+  } */
+
+
+  /* .card {
+    @apply bg-white rounded-lg p-6 shadow-xl m-12;
+  } */
+
+
+  .button{
+    @apply relative inline-flex items-center justify-center overflow-hidden rounded-xl bg-gradient-to-r from-indigo-600 via-violet-600 to-fuchsia-600 px-6 py-3 font-semibold tracking-wide text-white shadow-lg shadow-violet-500/30 transition-all duration-300 ease-out hover:-translate-y-1 hover:scale-105 hover:shadow-xl hover:shadow-violet-500/40 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-violet-300 active:translate-y-0 active:scale-95;
+  }
+
+  .button::before{
+    content: "";
+    @apply pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/30 to-transparent transition-transform duration-700 ease-out;
+  }
+
+  .button:hover::before{
+    @apply translate-x-full;
+  }
+
+}
+
+@layer utilities{
+  .text-shadow{
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+  }
+}

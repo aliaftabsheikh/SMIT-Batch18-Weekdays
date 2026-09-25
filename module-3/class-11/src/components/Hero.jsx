@@ -13,7 +13,7 @@ const Hero = () => {
 
       <Navbar />
 
-      <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col px-6 sm:px-10 lg:px-16">
+      <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col px-6 sm:px-10 lg:py-16">
 
         <div className="mt-auto max-w-3xl pb-10 pt-16 sm:pb-16 sm:pt-20 lg:pb-20">
           <div className="mb-5 flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.28em] text-red-500">
