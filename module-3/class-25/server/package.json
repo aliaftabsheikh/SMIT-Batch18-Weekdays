@@ -1,0 +1,13 @@
+{
+  "name": "todo-api-server",
+  "version": "1.0.0",
+  "description": "Express CRUD API for todos backed by a local JSON file",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "dependencies": {
+    "express": "^4.21.2"
+  }
+}
